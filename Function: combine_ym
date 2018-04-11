@@ -1,0 +1,9 @@
+combine_ym<- function(dataset, column){
+  new.months<- month_cre(column)
+  new.months2 <- convert_month(new.months)
+  month_created <- new.months2
+  #cbind(dataset, month_created)
+  new.years <- year_cre(column)
+  year_created <- new.years
+  cbind(dataset, year_created, month_created)
+}
