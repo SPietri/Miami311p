@@ -71,7 +71,8 @@ geteR <- function(name="Insert Your Name", by = "day"){
   if(by = "day"){
   date<- as.character(Sys.Date())}
   if(by = "time"){
-  date<- as.character(Sys.time())}
+  date1<- Sys.time()
+  date<- format(date1, "%Y-%m, %I:%M %p ")}
  ########################################### 
   print("The name of your database is - MiamiAPI311.sqlite - an it can be found in your working directory.")
   dbWriteTable(conn= mydb,
