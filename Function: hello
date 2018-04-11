@@ -54,18 +54,8 @@ geteR <- function(name="Insert Your Name"){
                                       "issue.type", "latitude", "longitude", "method", "district", "street.address", "ticket.closed",
                                       "ticket.open","id", "x.coor", "y.coor", "zipcode")
   print("You can find the data gathered from the API in your enviroment under the name - Miami311API -. Change it as you please. This will be overwritten each time you run the function.")
+  combine_ym(data_after_na_removed, data_after_na_removed$created
   Miami311API <<- data_after_na_removed
-  
-  comb_month<- function(data_after_na_removed, ){
-  new.months<- month_cre(column)
-  new.months2 <- convert_month(new.months)
-  month_created <- new.months2
-  #cbind(dataset, month_created)
-  new.years <- year_cre(column)
-  year_created <- new.years
-  cbind(dataset, year_created, month_created)
-}
-  
   wd<- getwd()
   print(paste("Also, a csv file titled - miami311API - will be in", wd , "This file will be overwritten each time you run the function."))
   write.csv(Miami311API, "miami311API.csv")
