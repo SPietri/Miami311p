@@ -7,3 +7,4 @@ combine_ym<- function(dataset, column){
   year_created <- new.years
   cbind(dataset, year_created, month_created)
 }
+
