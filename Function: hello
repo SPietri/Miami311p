@@ -1,5 +1,5 @@
 #######################################################################################################################################
-################## The Function hello() ###############################################################################################
+################## The Function geteR() ###############################################################################################
 #######################################################################################################################################
 # This function uses the packages jsonlite and RSQLite. It links to the API on the Miami311 site:
 # (https://opendata.miamidade.gov/311/311-Service-Requests-Miami-Dade-County/dj6j-qg5t).
@@ -14,10 +14,10 @@
 
 
 
-hello<- function(name="Siana", db = TRUE){
+geteR <- function(name="Insert Your Name"){
   #Enter your name to begin function
-  print(paste("Hello", name, "this function is gathering Miami 311 Data using a json API"))
-  
+  print(paste("Hello", name, "this function is for gathering Miami 311 Data using a json API"))
+
   #Installing json package
   if(!"jsonlite" %in% installed.packages()){
     print("Installing jsonlite package...")
@@ -28,7 +28,7 @@ hello<- function(name="Siana", db = TRUE){
     print("The jsonlite package was already installed, calling library...")
     library(jsonlite)
   }
-  
+
   #Installing RSQLite package
   if(!"RSQLite" %in% installed.packages()){
     print("Installing RSQLite package...")
@@ -38,37 +38,48 @@ hello<- function(name="Siana", db = TRUE){
   }else{
     print("The RSQLite package was already installed, calling library...")
   }
-  
+
   # Grab Data from the API
   print("Required packages have been installed. Now gathering the API data. Just a moment...")
   data.json<- fromJSON("https://opendata.miamidade.gov/resource/rbng-6mha.json")
-  
+
   # Clean the data
   print("Preparing the data...")
   data_after_columns_removed<- data.json[ , -which(names(data.json) %in% c(":@computed_region_txnr_gjhz", ":@computed_region_engu_ybxz", "ticket_status", "ticket_last_updated_date_time",
-                                                                           "ticket_id", "state", "location_state", "location_city", "location_address", "created_year_month", 
+                                                                           "state", "location_state", "location_city", "location_address",
                                                                            "location", ":@computed_region_secj_6v34", ":@computed_region_sbwq_2egt", ":@computed_region_gqkf_326d",
                                                                            ":@computed_region_9gk8_96b4", "location_zip"))]
   data_after_na_removed <- na.omit(data_after_columns_removed)
-  colnames(data_after_na_removed)<- c("actual.days", "case.owner", "case.owner.description", "city", "goal.days",
+  colnames(data_after_na_removed)<- c("actual.days", "case.owner", "case.owner.description", "city","created", "goal.days",
                                       "issue.type", "latitude", "longitude", "method", "district", "street.address", "ticket.closed",
-                                      "ticket.open", "x.coor", "y.coor", "zipcode")
+                                      "ticket.open","id", "x.coor", "y.coor", "zipcode")
   print("You can find the data gathered from the API in your enviroment under the name - Miami311API -. Change it as you please. This will be overwritten each time you run the function.")
   Miami311API <<- data_after_na_removed
+  
+  comb_month<- function(data_after_na_removed, ){
+  new.months<- month_cre(column)
+  new.months2 <- convert_month(new.months)
+  month_created <- new.months2
+  #cbind(dataset, month_created)
+  new.years <- year_cre(column)
+  year_created <- new.years
+  cbind(dataset, year_created, month_created)
+}
+  
   wd<- getwd()
   print(paste("Also, a csv file titled - miami311API - will be in", wd , "This file will be overwritten each time you run the function."))
   write.csv(Miami311API, "miami311API.csv")
-  
- #Creating the database
+
+  #Creating the database
   print(paste( name, "now the database is being created for you using the defualt file placed previously in your directory. The purpose of this database is to store data gathered once a day. It wll save in the database as the date you gathered it."))
   s <- getwd()
   setwd(s)
   miami4db<- read.csv("miami311API.csv")
   mydb <- dbConnect(SQLite(), dbname="Miami311API.sqlite")
-  date<- as.character(Sys.Date())
+  date<- as.character(Sys.time())
   print("The name of your database is - MiamiAPI311.sqlite - an it can be found in your working directory.")
-  dbWriteTable(conn= mydb, 
-               name= paste(date), value = miami4db, row.names = FALSE, header=TRUE, overwrite = TRUE)
+  dbWriteTable(conn= mydb,
+               name= paste(date), value = miami4db, row.names = FALSE, header=TRUE, overwrite = FALSE)
   mapi_db <<- mydb
   print("The database is created and filled with the API data.It is titled - mapi_db- .")
 }
