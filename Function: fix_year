@@ -1,0 +1,8 @@
+fix_year<- function(v){
+  created_year<- unlist(lapply(v, function(v){
+  if(nchar(v)==6){
+    substring((v[which(nchar(v)==6)]),1,4)}
+  else if(nchar(v)==5){
+    substring((v[which(nchar(v)==5)]), 1,4)}
+  }))
+  print(created_year, quotes = FALSE)}
