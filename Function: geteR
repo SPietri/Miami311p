@@ -14,7 +14,7 @@
 
 
 
-geteR <- function(name="Insert Your Name"){
+geteR <- function(name="Insert Your Name", by = "day"){
   #Enter your name to begin function
   print(paste("Hello", name, "this function is for gathering Miami 311 Data using a json API"))
 
@@ -54,7 +54,7 @@ geteR <- function(name="Insert Your Name"){
                                       "issue.type", "latitude", "longitude", "method", "district", "street.address", "ticket.closed",
                                       "ticket.open","id", "x.coor", "y.coor", "zipcode")
   print("You can find the data gathered from the API in your enviroment under the name - Miami311API -. Change it as you please. This will be overwritten each time you run the function.")
-  combine_ym(data_after_na_removed, data_after_na_removed$created
+  combine_ym(data_after_na_removed, data_after_na_removed$created)
   Miami311API <<- data_after_na_removed
   wd<- getwd()
   print(paste("Also, a csv file titled - miami311API - will be in", wd , "This file will be overwritten each time you run the function."))
@@ -66,7 +66,13 @@ geteR <- function(name="Insert Your Name"){
   setwd(s)
   miami4db<- read.csv("miami311API.csv")
   mydb <- dbConnect(SQLite(), dbname="Miami311API.sqlite")
-  date<- as.character(Sys.time())
+ 
+ ######### Option for date ################
+  if(by = "day"){
+  date<- as.character(Sys.Date())}
+  if(by = "time"){
+  date<- as.character(Sys.time())}
+ ########################################### 
   print("The name of your database is - MiamiAPI311.sqlite - an it can be found in your working directory.")
   dbWriteTable(conn= mydb,
                name= paste(date), value = miami4db, row.names = FALSE, header=TRUE, overwrite = FALSE)
