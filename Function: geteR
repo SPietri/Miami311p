@@ -17,7 +17,7 @@
 geteR <- function(name="Insert Your Name", by = "day"){
   #Enter your name to begin function
   print(paste("Hello", name, "this function is for gathering Miami 311 Data using a json API"))
-
+  
   #Installing json package
   if(!"jsonlite" %in% installed.packages()){
     print("Installing jsonlite package...")
@@ -28,7 +28,7 @@ geteR <- function(name="Insert Your Name", by = "day"){
     print("The jsonlite package was already installed, calling library...")
     library(jsonlite)
   }
-
+  
   #Installing RSQLite package
   if(!"RSQLite" %in% installed.packages()){
     print("Installing RSQLite package...")
@@ -38,11 +38,11 @@ geteR <- function(name="Insert Your Name", by = "day"){
   }else{
     print("The RSQLite package was already installed, calling library...")
   }
-
+  
   # Grab Data from the API
   print("Required packages have been installed. Now gathering the API data. Just a moment...")
   data.json<- fromJSON("https://opendata.miamidade.gov/resource/rbng-6mha.json")
-
+  
   # Clean the data
   print("Preparing the data...")
   data_after_columns_removed<- data.json[ , -which(names(data.json) %in% c(":@computed_region_txnr_gjhz", ":@computed_region_engu_ybxz", "ticket_status", "ticket_last_updated_date_time",
@@ -59,24 +59,25 @@ geteR <- function(name="Insert Your Name", by = "day"){
   wd<- getwd()
   print(paste("Also, a csv file titled - miami311API - will be in", wd , "This file will be overwritten each time you run the function."))
   write.csv(Miami311API, "miami311API.csv")
-
+  
   #Creating the database
   print(paste( name, "now the database is being created for you using the defualt file placed previously in your directory. The purpose of this database is to store data gathered once a day. It wll save in the database as the date you gathered it."))
   s <- getwd()
   setwd(s)
   miami4db<- read.csv("miami311API.csv")
   mydb <- dbConnect(SQLite(), dbname="Miami311API.sqlite")
- 
- ######### Option for date ################
-  if(by = "day"){
-  date<- as.character(Sys.Date())}
-  if(by = "time"){
-  date1<- Sys.time()
-  date<- format(date1, "%Y-%m, %I:%M %p ")}
- ########################################### 
+  
+  ######### Option for date ################
+  if(by != "day"){
+    date1<- Sys.time()
+    date<- format(date1, "%Y-%m, %I:%M %p")
+  }else
+      { date <- as.character(Sys.Date())}
+  ########################################### 
+  
   print("The name of your database is - MiamiAPI311.sqlite - an it can be found in your working directory.")
   dbWriteTable(conn= mydb,
-               name= paste(date), value = miami4db, row.names = FALSE, header=TRUE, overwrite = FALSE)
+               name= paste(date), value = miami4db, row.names = FALSE, header=TRUE, append = TRUE)
   mapi_db <<- mydb
   print("The database is created and filled with the API data.It is titled - mapi_db- .")
 }
