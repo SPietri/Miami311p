@@ -5,4 +5,6 @@ The data can be gathered daily and will be stored in the database under the labe
 Since the API only includes recent entries of size 1000, a dataset of Miami 311 data going back to 2013 is also included by the name 
 Miami_Dade. 
 
+Install from GitHub :  devtools::install_github("sauravkaushik8/SamplePackage")
+
 data source: https://opendata.miamidade.gov/311/311-Service-Requests-Miami-Dade-County/dj6j-qg5t
