@@ -1,0 +1,17 @@
+Package: Miami311p
+Type: Package
+Title: Gathers Miami311 data from API and stores it to a database in user working directory.
+Version: 0.0.0.9000
+Author: Siana Pietri <spietri@mail.usf.edu> [aut,cre]
+Description: This is a repository for the R package Miami311p. 
+             It gathers API data and stores it to a SQL database in the users working directory. 
+             The data can be gathered daily and will be stored in the database under the label of 
+             the date (without overwriting the previous days data). Since the API only includes recent 
+             entries of size 1000, a dataset of Miami311 data going back to 2013 is also included by 
+             the name m13.
+URL: https://github.com/SPietri/Miami311p 
+Depends: R(>= 3.1.2)
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
